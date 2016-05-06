@@ -1,8 +1,8 @@
 #!/bin/bash
 WORKDIR='/home/maayanlab/Zika'
-SRA_BIN='/home/maayanlab/Downloads/sratoolkit.2.5.7-ubuntu64/bin/'
+SRA_BIN='/home/maayanlab/Downloads/sratoolkit.2.6.2-mac64/bin/'
 cmd_name='fastq-dump'
-featureCounts='/home/maayanlab/Downloads/subread-1.4.6-p2-Linux-x86_64/bin/featureCounts'
+featureCounts='/home/maayanlab/Downloads/subread-1.5.0-p2-source/test/featureCounts'
 
 GENOME_GTF='/home/maayanlab/Zika/Homo_sapiens/UCSC/hg19/Annotation/Genes/genes.gtf'
 GENOME_FA='/home/maayanlab/Zika/Homo_sapiens/UCSC/hg19/Sequence/WholeGenomeFasta/genome.fa'
