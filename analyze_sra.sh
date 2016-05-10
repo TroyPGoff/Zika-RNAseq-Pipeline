@@ -1,8 +1,8 @@
 #!/bin/bash
-WORKDIR='/home/maayanlab/Zika'
-SRA_BIN='/home/maayanlab/Downloads/sratoolkit.2.5.7-ubuntu64/bin/'
+WORKDIR='/home/maayanlab/tpg/Fra1/'
+SRA_BIN='/home/maayanlab/Downloads/sratoolkit.2.6.2-mac64/bin/'
 cmd_name='fastq-dump'
-featureCounts='/home/maayanlab/Downloads/subread-1.4.6-p2-Linux-x86_64/bin/featureCounts'
+featureCounts='/home/maayanlab/Downloads/subread-1.5.0-p2-source/test/featureCounts'
 
 GENOME_GTF='/home/maayanlab/Zika/Homo_sapiens/UCSC/hg19/Annotation/Genes/genes.gtf'
 GENOME_FA='/home/maayanlab/Zika/Homo_sapiens/UCSC/hg19/Sequence/WholeGenomeFasta/genome.fa'
@@ -17,20 +17,20 @@ mkdir star_output
 mkdir featureCount_output
 
 ## dump .sra to .fastq
-for sra in $(ls SINGLE/SRR*/*.sra); do
+for sra in $(); do
 	echo $sra
 	$SRA_BIN$cmd_name -O fastqs $sra
 done
 
 ## Note that paired-end sequencing reads should be dumped with different params
-for sra in $(ls PAIRED/SRR*/*.sra); do
+for sra in $(ls SRP*/SRR*/SRR*.sra); do
 	echo $sra
 	$SRA_BIN$cmd_name -I --split-files -O paired_fastqs $sra
 done
 
 ## make star index
 # STAR \
-#     --runThreadN 8 \
+#     --runThreadN 4 \
 #     --runMode genomeGenerate \
 #     --genomeDir $STAR_INDEX \
 #     --genomeFastaFiles $GENOME_FA \
@@ -45,7 +45,7 @@ for fq in $(ls); do
 	STAR \
 		--genomeDir $STAR_INDEX \
 		--sjdbGTFfile $GENOME_GTF \
-		--runThreadN 8 \
+		--runThreadN 4 \
 		--outSAMstrandField intronMotif \
 		--outFilterIntronMotifs RemoveNoncanonical \
 		--outFileNamePrefix $WORKDIR/star_output/$basename \
@@ -58,7 +58,7 @@ for fq in $(ls); do
 	outname="$basename.count.txt"
 	bam="$WORKDIR/star_output/$basename$suffix"
 	$featureCounts \
-		-T 8 \
+		-T 4 \
 		-t exon \
 		-g gene_id \
 		-a $GENOME_GTF \
@@ -78,7 +78,7 @@ for basename in $(ls | cut -f1 -d '_' | sort | uniq); do
 	STAR \
 		--genomeDir $STAR_INDEX \
 		--sjdbGTFfile $GENOME_GTF \
-		--runThreadN 8 \
+		--runThreadN 4 \
 		--outSAMstrandField intronMotif \
 		--outFilterIntronMotifs RemoveNoncanonical \
 		--outFileNamePrefix $WORKDIR/star_output/$basename \
@@ -91,7 +91,7 @@ for basename in $(ls | cut -f1 -d '_' | sort | uniq); do
 	outname="$basename.count.txt"
 	bam="$WORKDIR/star_output/$basename$suffix"
 	$featureCounts \
-		-T 8 \
+		-T 4 \
 		-t exon \
 		-g gene_id \
 		-a $GENOME_GTF \
