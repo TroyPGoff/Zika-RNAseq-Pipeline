@@ -1,12 +1,12 @@
 #!/bin/bash
-WORKDIR='/home/maayanlab/Zika'
-SRA_BIN='/home/maayanlab/Downloads/sratoolkit.2.6.2-mac64/bin/'
+WORKDIR='/Users/MaayanLaboratory/Zika'
+SRA_BIN='/Users/MaayanLaboratory/Downloads/sratoolkit.2.6.2-mac64/bin/'
 cmd_name='fastq-dump.2.6.2'
-featureCounts='/home/maayanlab/Downloads/subread-1.5.0-p2-source/test/featureCounts'
+featureCounts='/Users/MaayanLaboratory/Downloads/subread-1.5.0-p2-source/test/featureCounts'
 
-GENOME_GTF='/home/maayanlab/Zika/Homo_sapiens/UCSC/hg19/Annotation/Genes/genes.gtf'
-GENOME_FA='/home/maayanlab/Zika/Homo_sapiens/UCSC/hg19/Sequence/WholeGenomeFasta/genome.fa'
-STAR_INDEX='/home/maayanlab/Zika/Homo_sapiens/UCSC/hg19/star/STAR_2.4.1c/'
+GENOME_GTF='/Users/MaayanLaboratory/Zika/Homo_sapiens/UCSC/hg19/Annotation/Genes/genes.gtf'
+GENOME_FA='/Users/MaayanLaboratory/Zika/Homo_sapiens/UCSC/hg19/Sequence/WholeGenomeFasta/genome.fa'
+STAR_INDEX='/Users/MaayanLaboratory/Zika/Homo_sapiens/UCSC/hg19/star/STAR_2.4.1c/'
 
 cd $WORKDIR
 
@@ -30,7 +30,7 @@ done
 
 ## make star index
 # STAR \
-#     --runThreadN 8 \
+#     --runThreadN 4 \
 #     --runMode genomeGenerate \
 #     --genomeDir $STAR_INDEX \
 #     --genomeFastaFiles $GENOME_FA \
@@ -45,7 +45,7 @@ for fq in $(ls); do
 	STAR \
 		--genomeDir $STAR_INDEX \
 		--sjdbGTFfile $GENOME_GTF \
-		--runThreadN 8 \
+		--runThreadN 4 \
 		--outSAMstrandField intronMotif \
 		--outFilterIntronMotifs RemoveNoncanonical \
 		--outFileNamePrefix $WORKDIR/star_output/$basename \
@@ -78,7 +78,7 @@ for basename in $(ls | cut -f1 -d '_' | sort | uniq); do
 	STAR \
 		--genomeDir $STAR_INDEX \
 		--sjdbGTFfile $GENOME_GTF \
-		--runThreadN 8 \
+		--runThreadN 4 \
 		--outSAMstrandField intronMotif \
 		--outFilterIntronMotifs RemoveNoncanonical \
 		--outFileNamePrefix $WORKDIR/star_output/$basename \
