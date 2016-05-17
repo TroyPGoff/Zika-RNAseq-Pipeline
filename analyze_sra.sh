@@ -2,7 +2,7 @@
 WORKDIR='/Users/MaayanLaboratory/Zika'
 SRA_BIN='/Users/MaayanLaboratory/Downloads/sratoolkit.2.6.2-mac64/bin/'
 cmd_name='fastq-dump.2.6.2'
-featureCounts='/Users/MaayanLaboratory/Downloads/subread-1.5.0-p2-source/test/featureCounts'
+featureCounts='/Users/MaayanLaboratory/Zika/featureCounts'
 
 GENOME_GTF='/Users/MaayanLaboratory/Zika/Homo_sapiens/UCSC/hg19/Annotation/Genes/genes.gtf'
 GENOME_FA='/Users/MaayanLaboratory/Zika/Homo_sapiens/UCSC/hg19/Sequence/WholeGenomeFasta/genome.fa'
@@ -42,7 +42,7 @@ cd fastqs
 for fq in $(ls); do
 	basename=$(echo $fq | cut -f1 -d '.')
 	echo $basename
-	STAR \
+	/Users/MaayanLaboratory/Zika/STAR \
 		--genomeDir $STAR_INDEX \
 		--sjdbGTFfile $GENOME_GTF \
 		--runThreadN 4 \
@@ -57,8 +57,8 @@ for fq in $(ls); do
 	suffix="Aligned.sortedByCoord.out.bam"
 	outname="$basename.count.txt"
 	bam="$WORKDIR/star_output/$basename$suffix"
-	$featureCounts \
-		-T 8 \
+	/Users/MaayanLaboratory/Zika/featureCounts \
+		-T 4 \
 		-t exon \
 		-g gene_id \
 		-a $GENOME_GTF \
@@ -75,7 +75,7 @@ for basename in $(ls | cut -f1 -d '_' | sort | uniq); do
 	fq1=$basename$fq1
 	fq2=$basename$fq2
 
-	STAR \
+	/Users/MaayanLaboratory/Zika/STAR \
 		--genomeDir $STAR_INDEX \
 		--sjdbGTFfile $GENOME_GTF \
 		--runThreadN 4 \
@@ -90,8 +90,8 @@ for basename in $(ls | cut -f1 -d '_' | sort | uniq); do
 	suffix="Aligned.sortedByCoord.out.bam"
 	outname="$basename.count.txt"
 	bam="$WORKDIR/star_output/$basename$suffix"
-	$featureCounts \
-		-T 8 \
+	/Users/MaayanLaboratory/Zika/featureCounts \
+		-T 4 \
 		-t exon \
 		-g gene_id \
 		-a $GENOME_GTF \
